@@ -11,19 +11,21 @@ from numpy.linalg import solve
 from numpy.linalg import inv
 
 
-# esercizio 1
-
-def linear_equations(matrix, vector) -> None:
+def linear_equations(matrix, vector) -> array:
     """
     this function resolve a system of linear equations
     :param matrix: matrix of coefficients
     :param vector: vector of constant terms
 
-    >>> linear_equations(np.eye(2),array([1,1]))
-    [1,1]
+    >>> linear_equations(np.eye(2),np.array([1,1]))
+    The system has a single unique solution.
+    [1. 1.]
+
+    >>> linear_equations(np.array([[1,0],[1,0]]),np.array([1,0]))
+    The system has no solution.
 
     """
-    B = np.c_appen[matrix, vector]
+    B = np.c_[matrix, vector]
     rank_A = matrix_rank(matrix)
     rank_B = matrix_rank(B)
     if rank_A == rank_B:
@@ -35,6 +37,7 @@ def linear_equations(matrix, vector) -> None:
             if input('Do you want the matrix after the gauss_elimination elimination? [y/n]\n') == 'y':
                 S = gauss_elimination(B)
                 print(S)
+                return S
     else:
         print('\n The system has no solution.\n')
         return None
@@ -43,48 +46,51 @@ def linear_equations(matrix, vector) -> None:
 # esercizio 2
 
 
-def linear_dependence(A):
-    '''
+def linear_dependence(matrix: array) -> int:
+    """
     This function answer to the question "Are these vectors linearly independent?"
 
-    A : numpy-array matrix with vectors as rows
-    '''
-    rank = matrix_rank(A)
-    if rank == A.shape[0]:
+    :param matrix: matrix with vectors as rows
+    :return: the number of linearly independent vectors
+    """
+    rank = matrix_rank(matrix)
+    if rank == matrix.shape[0]:
         print('The vectors are linearly independents')
     else:
         print(f'The vectors are linearly dependents and only {rank} of them are linearly independents')
         if input('Do you want the matrix after the gauss_elimination elimination? [y/n]\n') == 'y':
-            S = gauss_elimination(A)
+            S = gauss_elimination(matrix)
             print(S)
+    return rank
 
 
 # esercizio3
 
 
-def cartesian_representation_line(a, b, type=1):
-    '''
+def cartesian_representation_line(vec_1: np.array(), vec_2: np.array(), type: int = 1) -> None:
+    """
     This function print the cartesian presentation of a line
-    a: numpy-array of the first point
-    b: numpy-array of the direction (type = 0) or of the second point (type = 1)
-    '''
+    a: numpy-array of the
+    b: numpy-array of the
+
+    :param vec_1: first point
+    :param vec_2: direction (type = 0) or the second point (type = 1)
+    :param type: it switches between two points and one point and a direction
+    """
     if type:
-        b = b - a
-    for i in range(len(a)):
-        print(f' x_{i + 1} = {a[i]} + {b[i]}t')
+        vec_2 = vec_2 - vec_1
+    for i in range(len(vec_1)):
+        print(f' x_{i + 1} = {vec_1[i]} + {vec_2[i]}t')
+    return None
 
 
-
-def gauss_elimination(matrix):
-    '''
-    This function compute  Gauss elimination process
-    matrix: numpy-array
-    '''
-
-    n = len(matrix)
-    m = len(matrix[0])
-    np.array(matrix, dtype=float)
-
+def gauss_elimination(matrix: np.array()) -> np.array():
+    """
+    This function compute Gauss elimination process
+    :param matrix:
+    :return:
+    """
+    [n,m] = matrix.shape
     for _ in range(matrix_rank(matrix)):
         pivot = np.argmax(np.transpose(matrix)[_][_:])
         matrix[pivot + _], matrix[_] = matrix[_], matrix[pivot + _]
@@ -96,7 +102,7 @@ def gauss_elimination(matrix):
 
 
 def conic_section_classification(coeff=[]):
-    '''
+    """
     This function provides a classification of a conic section
 
     coeff: list of the coefficient of the equation of the conic section
@@ -108,7 +114,7 @@ def conic_section_classification(coeff=[]):
     then the array coeff is
 
     [A,B,C,D,E,F]
-    '''
+    """
 
     A = array([[coeff[0], coeff[1] / 2, coeff[3] / 2], [coeff[1] / 2, coeff[2], coeff[4] / 2],
                [coeff[3], coeff[4] / 2, coeff[5]]])
@@ -140,6 +146,8 @@ def conic_section_classification(coeff=[]):
 
 
 if __name__ == '__main__':
-    pass
+    import doctest
 
-
+    doctest.testmod(verbose=True)
+    # linear_equations(np.eye(2),np.array([1,1]))
+    # pass
