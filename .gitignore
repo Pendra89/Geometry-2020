@@ -137,3 +137,7 @@ code/share/
 code/conda-meta/
 
 code/include/
+
+.idea/
+
+.DS_Store
