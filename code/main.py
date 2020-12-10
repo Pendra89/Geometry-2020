@@ -67,7 +67,7 @@ def linear_dependence(matrix: array) -> int:
 # esercizio3
 
 
-def cartesian_representation_line(vec_1: np.array(), vec_2: np.array(), type: int = 1) -> None:
+def cartesian_representation_line(vec_1: np.array, vec_2: np.array, type: int = 1) -> None:
     """
     This function print the cartesian presentation of a line
     a: numpy-array of the
@@ -84,28 +84,23 @@ def cartesian_representation_line(vec_1: np.array(), vec_2: np.array(), type: in
     return None
 
 
-def gauss_elimination(matrix: np.array()) -> np.array():
+def gauss_elimination(matrix) -> np.array:
     """
     This function compute Gauss elimination process
-    :param matrix:
-    :return:
+    :param matrix: generic matrix
+    :return: matrix after the Gauss elimination
     """
-    [n,m] = matrix.shape
-    for _ in range(matrix_rank(matrix)):
-        pivot = np.argmax(np.transpose(matrix)[_][_:])
-        matrix[pivot + _], matrix[_] = matrix[_], matrix[pivot + _]
-        for i in range(_ + 1, n):
-            coeff = (matrix[i][_] / matrix[_][_])
-            for j in range(_, m):
-                matrix[i][j] -= coeff * matrix[_][j]
-    return matrix
+    import sympy
+    return np.array(sympy.Matrix(matrix).rref()[0])
 
 
-def conic_section_classification(coeff=[]):
+
+
+def conic_section_classification(coeff: list) -> None:
     """
     This function provides a classification of a conic section
 
-    coeff: list of the coefficient of the equation of the conic section
+    :param coeff: list of the coefficient of the equation of the conic section
 
     if the equation is
 
@@ -143,11 +138,11 @@ def conic_section_classification(coeff=[]):
 
     else:
         print('This conic section is a degenerate conic, in particular we have two coincident lines')
+    return None
 
 
 if __name__ == '__main__':
-    import doctest
+    linear_dependence(np.array([[1,2],[2,4]]))
 
-    doctest.testmod(verbose=True)
     # linear_equations(np.eye(2),np.array([1,1]))
     # pass
