@@ -1,14 +1,23 @@
 import numpy as np
 from numpy import array
+
+from numpy.linalg import det
+from numpy.linalg import matrix_rank
+
+from numpy.linalg import solve
+
+
+"""
+*** remember the following useful tools***
+
 from numpy import transpose
 from numpy import dot
 from numpy import argmax
 from numpy import abs
-from numpy.linalg import det
-from numpy.linalg import matrix_rank
 from numpy.linalg import eig
-from numpy.linalg import solve
 from numpy.linalg import inv
+
+"""
 
 
 def linear_equations(matrix, vector) -> array:
