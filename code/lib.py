@@ -141,8 +141,5 @@ def conic_section_classification(coeff: list) -> None:
     return None
 
 
-if __name__ == '__main__':
-    linear_dependence(np.array([[1,2],[2,4]]))
 
-    # linear_equations(np.eye(2),np.array([1,1]))
-    # pass
+
