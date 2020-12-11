@@ -1,0 +1,333 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>main &mdash; geometry2020 1.2 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> geometry2020
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">geometry2020</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Module code</a> &raquo;</li>
+        
+      <li>main</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for main</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">array</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">transpose</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">dot</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">argmax</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="nb">abs</span>
+<span class="kn">from</span> <span class="nn">numpy.linalg</span> <span class="kn">import</span> <span class="n">det</span>
+<span class="kn">from</span> <span class="nn">numpy.linalg</span> <span class="kn">import</span> <span class="n">matrix_rank</span>
+<span class="kn">from</span> <span class="nn">numpy.linalg</span> <span class="kn">import</span> <span class="n">eig</span>
+<span class="kn">from</span> <span class="nn">numpy.linalg</span> <span class="kn">import</span> <span class="n">solve</span>
+<span class="kn">from</span> <span class="nn">numpy.linalg</span> <span class="kn">import</span> <span class="n">inv</span>
+
+
+<div class="viewcode-block" id="linear_equations"><a class="viewcode-back" href="../index.html#main.linear_equations">[docs]</a><span class="k">def</span> <span class="nf">linear_equations</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">vector</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">array</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    this function resolve a system of linear equations</span>
+<span class="sd">    :param matrix: matrix of coefficients</span>
+<span class="sd">    :param vector: vector of constant terms</span>
+
+<span class="sd">    &gt;&gt;&gt; linear_equations(np.eye(2),np.array([1,1]))</span>
+<span class="sd">    The system has a single unique solution.</span>
+<span class="sd">    [1. 1.]</span>
+
+<span class="sd">    &gt;&gt;&gt; linear_equations(np.array([[1,0],[1,0]]),np.array([1,0]))</span>
+<span class="sd">    The system has no solution.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">matrix</span><span class="p">,</span> <span class="n">vector</span><span class="p">]</span>
+    <span class="n">rank_A</span> <span class="o">=</span> <span class="n">matrix_rank</span><span class="p">(</span><span class="n">matrix</span><span class="p">)</span>
+    <span class="n">rank_B</span> <span class="o">=</span> <span class="n">matrix_rank</span><span class="p">(</span><span class="n">B</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">rank_A</span> <span class="o">==</span> <span class="n">rank_B</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">rank_A</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">matrix</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1"> The system has a single unique solution.</span><span class="se">\n</span><span class="s1"> </span><span class="si">{</span><span class="n">solve</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">vector</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s1"> &#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">solve</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">vector</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1"> The system has infinitely many solutions. </span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">input</span><span class="p">(</span><span class="s1">&#39;Do you want the matrix after the gauss_elimination elimination? [y/n]</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span>
+                <span class="n">S</span> <span class="o">=</span> <span class="n">gauss_elimination</span><span class="p">(</span><span class="n">B</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">S</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">S</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1"> The system has no solution.</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<span class="c1"># esercizio 2</span>
+
+
+<div class="viewcode-block" id="linear_dependence"><a class="viewcode-back" href="../index.html#main.linear_dependence">[docs]</a><span class="k">def</span> <span class="nf">linear_dependence</span><span class="p">(</span><span class="n">matrix</span><span class="p">:</span> <span class="n">array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function answer to the question &quot;Are these vectors linearly independent?&quot;</span>
+
+<span class="sd">    :param matrix: matrix with vectors as rows</span>
+<span class="sd">    :return: the number of linearly independent vectors</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">rank</span> <span class="o">=</span> <span class="n">matrix_rank</span><span class="p">(</span><span class="n">matrix</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">rank</span> <span class="o">==</span> <span class="n">matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The vectors are linearly independents&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;The vectors are linearly dependents and only </span><span class="si">{</span><span class="n">rank</span><span class="si">}</span><span class="s1"> of them are linearly independents&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">input</span><span class="p">(</span><span class="s1">&#39;Do you want the matrix after the gauss_elimination elimination? [y/n]</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span>
+            <span class="n">S</span> <span class="o">=</span> <span class="n">gauss_elimination</span><span class="p">(</span><span class="n">matrix</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">S</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">rank</span></div>
+
+
+<span class="c1"># esercizio3</span>
+
+
+<div class="viewcode-block" id="cartesian_representation_line"><a class="viewcode-back" href="../index.html#main.cartesian_representation_line">[docs]</a><span class="k">def</span> <span class="nf">cartesian_representation_line</span><span class="p">(</span><span class="n">vec_1</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">vec_2</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="nb">type</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function print the cartesian presentation of a line</span>
+<span class="sd">    a: numpy-array of the</span>
+<span class="sd">    b: numpy-array of the</span>
+
+<span class="sd">    :param vec_1: first point</span>
+<span class="sd">    :param vec_2: direction (type = 0) or the second point (type = 1)</span>
+<span class="sd">    :param type: it switches between two points and one point and a direction</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">:</span>
+        <span class="n">vec_2</span> <span class="o">=</span> <span class="n">vec_2</span> <span class="o">-</span> <span class="n">vec_1</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">vec_1</span><span class="p">)):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39; x_</span><span class="si">{</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s1"> = </span><span class="si">{</span><span class="n">vec_1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s1"> + </span><span class="si">{</span><span class="n">vec_2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s1">t&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="gauss_elimination"><a class="viewcode-back" href="../index.html#main.gauss_elimination">[docs]</a><span class="k">def</span> <span class="nf">gauss_elimination</span><span class="p">(</span><span class="n">matrix</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function compute Gauss elimination process</span>
+<span class="sd">    :param matrix: generic matrix</span>
+<span class="sd">    :return: matrix after the Gauss elimination</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span> <span class="nn">sympy</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sympy</span><span class="o">.</span><span class="n">Matrix</span><span class="p">(</span><span class="n">matrix</span><span class="p">)</span><span class="o">.</span><span class="n">rref</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span></div>
+
+
+
+
+<div class="viewcode-block" id="conic_section_classification"><a class="viewcode-back" href="../index.html#main.conic_section_classification">[docs]</a><span class="k">def</span> <span class="nf">conic_section_classification</span><span class="p">(</span><span class="n">coeff</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function provides a classification of a conic section</span>
+
+<span class="sd">    :param coeff: list of the coefficient of the equation of the conic section</span>
+
+<span class="sd">    if the equation is</span>
+
+<span class="sd">    A x^2 + B xy + C y^2 + D x + E y + F = 0</span>
+
+<span class="sd">    then the array coeff is</span>
+
+<span class="sd">    [A,B,C,D,E,F]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">A</span> <span class="o">=</span> <span class="n">array</span><span class="p">([[</span><span class="n">coeff</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">coeff</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">coeff</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="n">coeff</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">coeff</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">coeff</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span><span class="p">],</span>
+               <span class="p">[</span><span class="n">coeff</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">coeff</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">coeff</span><span class="p">[</span><span class="mi">5</span><span class="p">]]])</span>
+    <span class="n">rank</span> <span class="o">=</span> <span class="n">matrix_rank</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">rank</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">det</span><span class="p">(</span><span class="n">A</span><span class="p">[:</span><span class="mi">2</span><span class="p">,</span> <span class="p">:</span><span class="mi">2</span><span class="p">])</span>
+        <span class="c1"># remember that we have a finite precision on floats, for this reason we consider 1e-09 as tolerance</span>
+        <span class="k">if</span> <span class="n">d</span> <span class="o">&gt;</span> <span class="mf">1e-09</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;This conic section is an ellipse&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">d</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mf">1e-09</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;This conic section is a hyperbola&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;This conic section is a parabola&#39;</span><span class="p">)</span>
+
+
+    <span class="k">elif</span> <span class="n">rank</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;This conic section is a degenerate conic, &#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">det</span><span class="p">(</span><span class="n">A</span><span class="p">[:</span><span class="mi">2</span><span class="p">,</span> <span class="p">:</span><span class="mi">2</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">d</span> <span class="o">&gt;</span> <span class="mf">1e-09</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;in particular we have one point&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">d</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mf">1e-09</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;in particular we have two incident lines&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;in particular we have two parallel lines&#39;</span><span class="p">)</span>
+
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;This conic section is a degenerate conic, in particular we have two coincident lines&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">linear_dependence</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],[</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">]]))</span>
+
+    <span class="c1"># linear_equations(np.eye(2),np.array([1,1]))</span>
+    <span class="c1"># pass</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Gaetano Vitale
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
