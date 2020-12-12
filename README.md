@@ -8,7 +8,9 @@ In the file [lib.py](code/lib.py) there are some functions in Python language, s
 
 This work is for illustrative purposes only and may contain errors or inaccuracies. All contributions are welcome. For clarification or more information you can contact me at the email address gaetano.vitale@unimol.it.
 
-
+\
+\
+\
 
 Questo repository è un esempio di strumenti utili per l'esame di Geometria presso [Università del Molise](https://www2.dipmedicina.unimol.it/ingegneria-medica/).
 
