@@ -11,7 +11,6 @@ This work is for illustrative purposes only and may contain errors or inaccuraci
 \
 \
 \
-
 Questo repository è un esempio di strumenti utili per l'esame di Geometria presso [Università del Molise](https://www2.dipmedicina.unimol.it/ingegneria-medica/).
 
 Nel file [lib.py](code/lib.py) sono presenti alcune funzioni in linguaggio Python, che simulano le risposte durante l'esame. Suggerisco di scaricare il repository e aprire il file [index.html](/ docs / build / html / index.html) con il browser per vedere la documentazione.
